@@ -19,7 +19,7 @@
    "name": "The Incredible Radio Extension",
    "options_page": "options.html",
    "permissions": [ "background", "tabs", "notifications", "http://*/", "https://*/" ],
-   "version": "1.0.0",
+   "version": "1.0.1",
    "web_accessible_resources": [ "images/*" ],
    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
    "applications": {
