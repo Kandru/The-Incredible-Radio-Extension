@@ -6,6 +6,8 @@ class tire {
 		this.is_playing = false;
 		// initialize player variables
 		localStorage.setItem('data_radio', null);
+		// set default volume if none (otherwise radio would be muted for new users)
+		localStorage.setItem('player_volume', this.getVolume());
 		this.updateOnlineRadioList();
 	}
 
