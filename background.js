@@ -5,16 +5,16 @@ chrome.runtime.onMessage.addListener(
 		if (request.action == "play"){
 			radio.playStream(request.value);
 		}
-		if (request.action == "stop"){
+		else if (request.action == "stop"){
 			radio.stopStream();
 		}
-		if (request.action == "pause"){
+		else if (request.action == "pause"){
 			radio.pauseStream();
 		}
-		if (request.action == "updateOnlineRadioList"){
+		else if (request.action == "updateOnlineRadioList"){
 			radio.updateOnlineRadioList();
 		}
-		if (request.action == "player_volume"){
+		else if (request.action == "player_volume"){
 			radio.streamVolume(request.volume);
 		}
 });
