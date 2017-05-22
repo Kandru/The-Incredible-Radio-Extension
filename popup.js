@@ -66,6 +66,12 @@ function doSearch(e) {
 	});
 }
 
+function getPlayerState() {
+	chrome.runtime.getBackgroundPage(function(bg) {
+		document.querySelector('#player_state').innerHTML = 'currently ' + bg.radio.player_state.msg;
+	});
+}
+
 function DisplayCurrentRadio(radioItem) {
 	var html = '';
 	var slug = 'nostream';
@@ -235,6 +241,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		DisplayCurrentRadio(null);
 	});
 
+	// add polling for player state
+	//setInterval(getPlayerState, 100);
+
 	getFavoriteList();
-	
 });

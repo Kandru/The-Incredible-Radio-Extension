@@ -3,7 +3,12 @@ class tire {
 		this.api_version = '1';
 		this.api_url = 'https://api.kandru.de/tire/radios_v' + this.api_version + '.js';
 		this.player = null;
-		this.is_playing = false;
+		// player_state:
+		// 0 = stopped
+		// 1 = playing
+		// 2 = loading
+		// 3 = error
+		this.updateEventPlayerState({state: 0, msg: "stopped"});
 		// initialize player variables
 		localStorage.setItem('data_radio', null);
 		// set default volume if none (otherwise radio would be muted for new users)
@@ -95,11 +100,15 @@ class tire {
 		return genres;
 	}
 
+	updateEventPlayerState(state) {
+		this.player_state = state;
+	}
+
 	resetStream() {
 		if (this.player != null){
 			this.player.unload();
 			this.player = null;
-			this.is_playing = false;
+			this.updateEventPlayerState({state: 0, msg: "Reset"});
 		}
 	}
 	
@@ -111,26 +120,28 @@ class tire {
 			src: radioItem.streamurl,
 			volume: (this.getVolume()),
 			html5: true,
-			format: ['mp3', 'aac', 'ogg']
+			format: ['mp3', 'aac', 'ogg'],
+			onload: this.updateEventPlayerState({state: 2, msg: "loading"}),
+			onloaderror: this.updateEventPlayerState({state: 3, msg: "Error"}),
+			onplay: this.updateEventPlayerState({state: 1, msg: "playing"})
 		});
-		this.is_playing = true;
 		this.player.play();
 	}
 	
 	stopStream() {
 		var radioItem = JSON.parse(localStorage.getItem('data_radio'));
 		this.player.stop();
-		this.is_playing = false;
 		radioItem.state = 0;
 		localStorage.setItem('data_radio', JSON.stringify(radioItem));
+		this.updateEventPlayerState({state: 0, msg: "stopped"});
 	}
 	
 	pauseStream() {
-		if(this.is_playing == true) {
-			this.is_playing = false;
+		if(this.player_state['state'] == 1) {
+			this.updateEventPlayerState({state: 0, msg: "stopped"});
 			this.player.pause();
-		}else{
-			this.is_playing = true;
+		}else if(this.player_state['state'] == 0) {
+			this.updateEventPlayerState({state: 0, msg: "playing"});
 			this.player.play();
 		}
 	}
