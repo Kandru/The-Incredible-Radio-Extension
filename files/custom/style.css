@@ -2,3 +2,7 @@
 #stream_list li {
 	cursor: pointer;
 }
+
+#stream_list li:hover {
+	background-color: #e4e4e4;
+}
