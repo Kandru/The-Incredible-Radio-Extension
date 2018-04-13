@@ -100,6 +100,26 @@ class tire {
 		return genres;
 	}
 
+	streamOnplay(id) {
+		this.updateEventPlayerState({state: 1, msg: 'playing 1'});
+		console.log('play');
+	}
+
+	streamOnload() {
+		this.updateEventPlayerState({state: 2, msg: 'loading 1'});
+		console.log('load');
+	}
+
+	streamOnplayerror(id, error) {
+		this.updateEventPlayerState({state: 3, msg: error});
+		console.log('playerror');
+	}
+
+	streamOnloaderror(id, error) {
+		this.updateEventPlayerState({state: 3, msg: error});
+		console.log('loaderror');
+	}
+
 	updateEventPlayerState(state) {
 		this.player_state = state;
 	}
@@ -121,9 +141,10 @@ class tire {
 			volume: (this.getVolume()),
 			html5: true,
 			format: ['mp3', 'aac', 'ogg'],
-			onload: this.updateEventPlayerState({state: 2, msg: "loading"}),
-			onloaderror: this.updateEventPlayerState({state: 3, msg: "Error"}),
-			onplay: this.updateEventPlayerState({state: 1, msg: "playing"})
+			onloaderror: this.streamOnloaderror.call(this),
+			onplayerror: this.streamOnplayerror.call(this),
+			onload: this.streamOnload.call(this),
+			onplay: this.streamOnplay.call(this)
 		});
 		this.player.play();
 	}
